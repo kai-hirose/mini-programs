@@ -35,9 +35,6 @@ void* print1(void* msg) {
         printf("Failed to make child process. :(\n");
         pthread_mutex_unlock(&lock);
     }
-    pthread_mutex_lock(&lock);
-    printf("Message 1.2 \n");
-    pthread_mutex_unlock(&lock);
     pthread_mutex_unlock(&tlock);
 }
 
@@ -45,7 +42,7 @@ void* print2(void* msg) {
     pthread_mutex_lock(&tlock);
     pthread_mutex_lock(&lock);
     printf("%s \n", (char*)msg);
-    printf("Message 2.2 \n");
+    printf("Thread 2 says hello. \n");
     pthread_mutex_unlock(&lock);
     pthread_mutex_unlock(&tlock);
 }
@@ -56,7 +53,6 @@ int main() {
     char* msg2 = "Thread 2: ";
     (void)pthread_create(&th1, NULL, print1, (void*)msg1);
     (void)pthread_create(&th2, NULL, print2, (void*)msg2);
-    //Should be in order
     (void)pthread_join(th1, NULL);
     (void)pthread_join(th2, NULL);
     return 0;
